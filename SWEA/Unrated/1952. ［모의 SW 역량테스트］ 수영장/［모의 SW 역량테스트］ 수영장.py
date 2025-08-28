@@ -13,6 +13,10 @@ def buy_ticket(month, cost):
         if min_cost > cost:
             min_cost = cost
 
+    # 가지치기
+    if cost >= min_cost:
+        return
+
     # 마지막 월의 인덱스 번호가 아니면
     if month < 12:
         # 해당 월부터 가능한 모든 구성을 해본다
