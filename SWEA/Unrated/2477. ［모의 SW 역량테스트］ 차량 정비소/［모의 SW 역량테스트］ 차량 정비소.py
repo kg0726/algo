@@ -20,10 +20,12 @@ for tc in range(1, 1 + T):
     t = -1
     human = 0
     result = 0
-
+    # 현재 수리 진행중인 손님 수
+    in_progress = 0
     flag = True
 
-    while t < 30000:
+    # 최악의 경우 시간이 40000이 넘게 증가할 수 있음
+    while time2 or in_progress:
         a = 0
         b = 0
         # 시간의 흐름
@@ -34,6 +36,8 @@ for tc in range(1, 1 + T):
                 human += 1
                 time2.popleft()
                 desk_waiting.append(human)
+                # 현재 수리중인 손님 수 추가
+                in_progress += 1
 
         # 접수창구를 순회하며 비어있는 창구가 있고, 대기공간에 손님이 있다면 창구에 손님 정보를 넣음
         for i in range(N):
@@ -56,7 +60,8 @@ for tc in range(1, 1 + T):
             # 접수가 종료된 고객이 있는 경우 창구를 비워줌
             if fix[i] != [0] and fix[i][3] == t:
                 fix[i] = [0]
-
+                # 수리가 완료되어 손님 수 차감
+                in_progress -= 1
             if fix_waiting and fix[i] == [0]:
                 # 고객번호,이전 창구번호, 창구번호, t가 몇이면 접수가 종료될 지 기록함
                 # 이전 창구의 정보
