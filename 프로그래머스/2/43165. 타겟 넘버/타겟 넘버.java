@@ -1,56 +1,43 @@
-import java.util.*;
+// 음이 아닌 정수들
+// 정수들을 순서를 바꾸지 않고 적절히 더하거나 빼서 타겟 넘버를 만든다.
+// 해당 정수들을 순서를 바꾸지 않고 더하거나 빼서 target을 만든다.
+//(+를 붙일 수도, -를 붙일 수도 있다.)
 
 class Solution {
     
-    static boolean[] visited;
-    static int answer;
+    static int targetNum;
+    static int[] arr;
+    static int maxDepth;
+    static int answer = 0;
     
-    public static void dfs(int idx, int length, int target, int[] numbers) {
+    // dfs로 푸는 경우
+    // 1. 배열의 길이 == depth 가 기저조건, depth를 배열의 인덱스로 사용
+    // 2. 각 시행마다 +/- 후 재귀 호출
+    
+    static void dfs(int depth, int num) {
         
-        // 종료조건
-        if (idx == length) {
-            // target 값과 같은지 확인
-            
-            int sum = 0;
-            for (int i : numbers) {
-                sum += i;
-            }
-            if (sum == target) {
+        if (maxDepth == depth) {
+            // 여기서 target과 현재 num 비교
+            if (targetNum == num) {
                 answer += 1;
             }
             return;
         }
         
-        if (visited[idx]) {
-            dfs(idx + 1, length, target, numbers);
-        }
-        
-        for(int i = 0; i < 2; i++) {
-            
-            visited[idx] = true;
-            // 더하기
-            if (i == 0) {
-                dfs(idx + 1, length, target, numbers);
-                // 백트래킹
-                visited[idx] = false;
-                // 빼기
-            } else {
-                numbers[idx] = numbers[idx] * -1;
-                dfs(idx + 1, length, target, numbers);
-                // 백트래킹
-                visited[idx] = false;
-                numbers[idx] = numbers[idx] * -1;
-            }
-        }
+        // +인 경우
+        dfs(depth + 1, num + arr[depth]);
+        // -인 경우
+        dfs(depth + 1, num - arr[depth]);
         
     }
+    
     public int solution(int[] numbers, int target) {
-        answer = 0;
         
-        int length = numbers.length;
-        visited = new boolean[length];
+        targetNum = target;
+        arr = numbers;
+        maxDepth = numbers.length;
         
-        dfs(0, length, target, numbers);
+        dfs(0, 0);
         
         return answer;
     }
